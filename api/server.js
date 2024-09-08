@@ -9,8 +9,15 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-app.use(cors())
-
+// app.use(cors())
+app.use(
+	cors({
+		origin: 'https://mern-login-mongodb.onrender.com',
+		methods: ['GET', 'POST'],
+		credentials: true,
+	})
+)
+const port = process.env.PORT
 const uri = process.env.MONGODB_URI
 const client = new MongoClient(uri)
 let db
@@ -23,8 +30,8 @@ async function run() {
 		console.log(
 			'Pinged your deployment. You successfully connected to MongoDB!'
 		)
-		app.listen(5000, () => {
-			console.log('server on 5000')
+		app.listen(port, () => {
+			console.log('server on ', port)
 		})
 	} catch (error) {
 		console.error('error', error)
@@ -87,21 +94,15 @@ app.post('/login', async (req, res) => {
 })
 
 //verify token
-app.post('/api/verifyToken',
-	(req, res) => {
-		const token = req.header('Authorization')
-		if (!token) return res.status(401).send('access denied')
+app.post('/api/verifyToken', (req, res) => {
+	const token = req.header('Authorization')
+	if (!token) return res.status(401).send('access denied')
 
-		try {
-			const verified = jwt.verify(token, process.env.JWT_SECRET)
-			req.user = verified
-			return res.status(200).send('token valid')
-		} catch (err) {
-			res.status(400).send('invalid token')
-		}
-	})
-
-// //protected route
-// app.get('/dashboard', verifyToken, (req, res) => {
-// 	res.send('welcome to dashboard')
-// })
+	try {
+		const verified = jwt.verify(token, process.env.JWT_SECRET)
+		req.user = verified
+		return res.status(200).send('token valid')
+	} catch (err) {
+		res.status(400).send('invalid token')
+	}
+})
