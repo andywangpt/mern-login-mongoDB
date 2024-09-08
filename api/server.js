@@ -17,7 +17,7 @@ app.use(
 		credentials: true,
 	})
 )
-const port = process.env.PORT
+const port = process.env.PORT || null
 const uri = process.env.MONGODB_URI
 const client = new MongoClient(uri, {
 	tls: true,
@@ -43,7 +43,7 @@ async function run() {
 }
 run()
 
-app.post('/register', async (req, res) => {
+app.post(`${port}/register`, async (req, res) => {
 	const { username, password } = req.body
 
 	try {
@@ -70,7 +70,7 @@ app.post('/register', async (req, res) => {
 })
 
 // Login user
-app.post('/login', async (req, res) => {
+app.post(`${port}/login`, async (req, res) => {
 	const { username, password } = req.body
 
 	try {
@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
 })
 
 //verify token
-app.post('/api/verifyToken', (req, res) => {
+app.post(`${port}/api/verifyToken`, (req, res) => {
 	const token = req.header('Authorization')
 	if (!token) return res.status(401).send('access denied')
 
