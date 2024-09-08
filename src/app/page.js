@@ -1,4 +1,5 @@
 'use client'
+require('dotenv').config()
 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -23,7 +24,7 @@ export default function Home() {
 		e.preventDefault()
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/register',
+				`${process.env.NEXT_PUBLIC_API_URL}/register`,
 				{ username, password }
 			)
 			localStorage.setItem('login token', data.token)
@@ -38,7 +39,7 @@ export default function Home() {
 		e.preventDefault()
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/login',
+				`${process.env.NEXT_PUBLIC_API_URL}/login`,
 				{ username, password }
 			)
 			localStorage.setItem('login token', data.token)

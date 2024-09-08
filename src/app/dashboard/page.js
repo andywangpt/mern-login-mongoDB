@@ -1,4 +1,5 @@
 'use client'
+require('dotenv').config()
 // import { Button, Input, Select } from '@shadcn/ui'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -20,7 +21,7 @@ export default function Dashboard() {
 		} else {
 			axios
 				.post(
-					'http://localhost:5000/api/verifyToken',
+					`${process.env.NEXT_PUBLIC_API_URL}/api/verifyToken`,
 					{},
 					{
 						headers: {
