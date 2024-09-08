@@ -23,12 +23,11 @@ export default function Home() {
 	const handleCreateAccount = async (e) => {
 		e.preventDefault()
 		try {
-			const { response } = await axios.post(
+			const { data } = await axios.post(
 				`${process.env.NEXT_PUBLIC_API_URL}/register`,
 				{ username, password }
 			)
-			console.log(response)
-			const { data } = response
+			
 			console.log('Token:', data.token)
 
 			// Check if token exists in the response
@@ -40,7 +39,7 @@ export default function Home() {
 			localStorage.setItem('login token', data.token)
 			router.push('/dashboard')
 		} catch (err) {
-			console.log('err', err.response)
+			console.log('err', err.response.data)
 		}
 	}
 

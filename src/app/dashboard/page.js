@@ -35,7 +35,7 @@ export default function Dashboard() {
 				})
 				.catch((error) => {
 					localStorage.removeItem('login token')
-					router.push('/login')
+					router.push('/')
 				})
 		}
 	}, [router])
