@@ -17,7 +17,7 @@ export default function Dashboard() {
 		const token = localStorage.getItem('login token')
 
 		if (!token) {
-			router.push('/login')
+			router.push('/')
 		} else {
 			axios
 				.post(

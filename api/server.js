@@ -7,6 +7,12 @@ const express = require('express')
 const cors = require('cors')
 
 const app = express()
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
+const apiUrl = isDevelopment
+	? 'http://localhost:5000'
+	: `https://mern-login-mongodb.onrender.com/${port}`
+	
 
 app.use(express.json())
 // app.use(cors())
@@ -17,11 +23,10 @@ app.use(
 		credentials: true,
 	})
 )
-const port = process.env.PORT
+
 const uri = process.env.MONGODB_URI
-const client = new MongoClient(uri, {
-	tls: true,
-})
+const client = new MongoClient(uri)
+const port = process.env.PORT
 
 let db
 

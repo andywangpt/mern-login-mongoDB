@@ -64,7 +64,7 @@ export default function Home() {
 					Create an account
 				</h2>
 				<p className='text-gray-400 text-center mb-4'>
-					Enter your email below to create your account
+					Enter your email & password below to create your account or sign in
 				</p>
 				<form>
 					<div className='mb-4'>
