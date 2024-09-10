@@ -45,7 +45,7 @@ export default function Dashboard() {
 					router.push('/')
 				})
 		}
-	}, [router])
+	}, [apiUrl, router])
 
 	if (!isAuthenticated) {
 		return <div>Loading...</div>
