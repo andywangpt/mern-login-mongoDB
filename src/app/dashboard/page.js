@@ -11,7 +11,7 @@ import axios from 'axios'
 export default function Dashboard() {
 	const isDevelopment =
 		process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
-	const port = process.env.NEXT_PUBLIC_PORT || 5000
+	const port = process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
 
 	const apiUrl = isDevelopment
 		? 'http://localhost:5000'

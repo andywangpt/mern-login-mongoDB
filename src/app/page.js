@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input'
 
 export default function Home() {
 	const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
-	const port = process.env.NEXT_PUBLIC_PORT || 5000
+	const port =
+		process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
 
 	const apiUrl = isDevelopment
 		? 'http://localhost:5000'

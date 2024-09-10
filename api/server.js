@@ -8,7 +8,6 @@ const cors = require('cors')
 
 const app = express()
 
-
 app.use(express.json())
 // app.use(cors())
 app.use(
@@ -21,7 +20,8 @@ app.use(
 
 const uri = process.env.MONGODB_URI
 const client = new MongoClient(uri)
-const port = process.env.PORT
+const port = process.env.NEXT_PUBLIC_DEV_PORT || process.env.NEXT_PUBLIC_PORT
+// const port = 10000
 
 let db
 
