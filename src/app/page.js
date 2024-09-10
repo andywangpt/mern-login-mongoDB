@@ -9,6 +9,13 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 
 export default function Home() {
+	const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
+	const port = process.env.NEXT_PUBLIC_PORT || 5000
+
+	const apiUrl = isDevelopment
+		? 'http://localhost:5000'
+		: `https://mern-login-mongo-db.vercel.app/${port}`
+	
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const router = useRouter()
@@ -24,17 +31,16 @@ export default function Home() {
 		e.preventDefault()
 		try {
 			const { data } = await axios.post(
-				`${process.env.NEXT_PUBLIC_API_URL}/register`,
+				`${apiUrl}/register`,
 				{ username, password }
 			)
-			
+
 			console.log('Token:', data.token)
 
 			// Check if token exists in the response
 			if (!data.token) {
 				throw new Error('Token is missing from response')
 			}
-
 
 			localStorage.setItem('login token', data.token)
 			router.push('/dashboard')
@@ -46,10 +52,10 @@ export default function Home() {
 	const handleSignIn = async (e) => {
 		e.preventDefault()
 		try {
-			const { data } = await axios.post(
-				`${process.env.NEXT_PUBLIC_API_URL}/login`,
-				{ username, password }
-			)
+			const { data } = await axios.post(`${apiUrl}/login`, {
+				username,
+				password,
+			})
 			localStorage.setItem('login token', data.token)
 			router.push('/dashboard')
 		} catch (err) {
@@ -64,7 +70,8 @@ export default function Home() {
 					Create an account
 				</h2>
 				<p className='text-gray-400 text-center mb-4'>
-					Enter your email & password below to create your account or sign in
+					Enter your email & password below to create your
+					account or sign in
 				</p>
 				<form>
 					<div className='mb-4'>

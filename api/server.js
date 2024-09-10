@@ -7,11 +7,7 @@ const express = require('express')
 const cors = require('cors')
 
 const app = express()
-const isDevelopment = process.env.NODE_ENV !== 'production'
 
-const apiUrl = isDevelopment
-	? 'http://localhost:5000'
-	: `https://mern-login-mongo-db.vercel.app/${port}`
 
 app.use(express.json())
 // app.use(cors())
@@ -47,7 +43,7 @@ async function run() {
 }
 run()
 
-app.post(`${apiUrl}/register`, async (req, res) => {
+app.post('/register', async (req, res) => {
 	const { username, password } = req.body
 
 	try {
@@ -74,7 +70,7 @@ app.post(`${apiUrl}/register`, async (req, res) => {
 })
 
 // Login user
-app.post(`${apiUrl}/login`, async (req, res) => {
+app.post('/login', async (req, res) => {
 	const { username, password } = req.body
 
 	try {
@@ -101,7 +97,7 @@ app.post(`${apiUrl}/login`, async (req, res) => {
 })
 
 //verify token
-app.post(`${apiUrl}/api/verifyToken`, (req, res) => {
+app.post('/api/verifyToken', (req, res) => {
 	const token = req.header('Authorization')
 	if (!token) return res.status(401).send('access denied')
 

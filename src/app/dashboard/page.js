@@ -9,9 +9,16 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export default function Dashboard() {
+	const isDevelopment =
+		process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
+	const port = process.env.NEXT_PUBLIC_PORT || 5000
+
+	const apiUrl = isDevelopment
+		? 'http://localhost:5000'
+		: `https://mern-login-mongo-db.vercel.app/${port}`
+
 	const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
-	const [user, setUser] = useState('')
 
 	useEffect(() => {
 		const token = localStorage.getItem('login token')
@@ -21,7 +28,7 @@ export default function Dashboard() {
 		} else {
 			axios
 				.post(
-					`${process.env.NEXT_PUBLIC_API_URL}/api/verifyToken`,
+					`${apiUrl}/api/verifyToken`,
 					{},
 					{
 						headers: {
