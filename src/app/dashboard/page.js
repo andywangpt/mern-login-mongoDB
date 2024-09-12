@@ -11,24 +11,28 @@ import axios from 'axios'
 export default function Dashboard() {
 	const isDevelopment =
 		process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
-	const port = process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
+	const port =
+		process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
 
-	const apiUrl = isDevelopment
-		? 'http://localhost:5000'
-		: `https://mern-login-mongo-db.vercel.app/${port}`
+	// const apiUrl = isDevelopment
+	// 	? 'http://localhost:5000'
+	// 	: `https://mern-login-mongo-db.vercel.app/${port}`
 
 	const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
+	// const [response, setResponse] = useState('')
 
 	useEffect(() => {
 		const token = localStorage.getItem('login token')
+		console.log(token)
 
 		if (!token) {
 			router.push('/')
 		} else {
 			axios
 				.post(
-					`${apiUrl}/api/verifyToken`,
+					// `${apiUrl}/api/verifyToken`,
+					'/api/verifyToken',
 					{},
 					{
 						headers: {
@@ -39,13 +43,21 @@ export default function Dashboard() {
 				)
 				.then((response) => {
 					setIsAuthenticated(true)
+					console.log(
+						'Token verification response:',
+						response.data
+					)
 				})
 				.catch((error) => {
+					console.log(
+						'token verify failed: ',
+						error.response.data
+					)
 					localStorage.removeItem('login token')
-					router.push('/')
+					// router.push('/')
 				})
 		}
-	}, [apiUrl, router])
+	}, [router])
 
 	if (!isAuthenticated) {
 		return <div>Loading...</div>

@@ -2,7 +2,6 @@
 require('dotenv').config()
 
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -11,12 +10,30 @@ import { Input } from '@/components/ui/input'
 export default function Home() {
 	const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
 	const port =
-		process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
+	process.env.NEXT_PUBLIC_PORT || process.env.NEXT_PUBLIC_DEV_PORT
+
+ const [response, setResponse] = useState('')
+
+ const testApi = async (method) => {
+		try {
+			const { data } = await axios({
+				method: method,
+				url: '/api/test',
+				data: { test: 'data' },
+			})
+			setResponse(`${method} response: ${JSON.stringify(data)}`)
+		} catch (error) {
+			setResponse(`Error: ${error.message}`)
+			console.error('Full error:', error)
+		}
+ }
 
 	const apiUrl = isDevelopment
-		? 'http://localhost:5000'
+		? 'http://localhost:3000'
 		: `https://mern-login-mongo-db.vercel.app/${port}`
-	
+
+
+
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const router = useRouter()
@@ -32,35 +49,36 @@ export default function Home() {
 		e.preventDefault()
 		try {
 			const { data } = await axios.post(
-				`${apiUrl}/register`,
-				{ username, password }
+			'/api/register', { username, password }
 			)
 
 			console.log('Token:', data.token)
-
-			// Check if token exists in the response
-			if (!data.token) {
-				throw new Error('Token is missing from response')
-			}
-
 			localStorage.setItem('login token', data.token)
 			router.push('/dashboard')
+
 		} catch (err) {
-			console.log('err', err.response.data)
+			console.log('err', err.response)
 		}
 	}
 
 	const handleSignIn = async (e) => {
 		e.preventDefault()
 		try {
-			const { data } = await axios.post(`${apiUrl}/login`, {
-				username,
-				password,
-			})
+			const { data } = await axios.post(
+					'/api/login',
+				// `${apiUrl}/api/login`,
+				{
+					username,
+					password,
+				}
+			)
+			console.log('response', response)
 			localStorage.setItem('login token', data.token)
 			router.push('/dashboard')
+		
+		
 		} catch (err) {
-			console.log('err', err.response.data)
+			console.log('error at handlesignin', err.response)
 		}
 	}
 
@@ -124,6 +142,11 @@ export default function Home() {
 					</a>
 					.
 				</p>
+			</div>
+			<div>
+				<button onClick={() => testApi('GET')}>Test GET</button>
+				<button onClick={() => testApi('POST')}>Test POST</button>
+				<div>{response}</div>
 			</div>
 		</div>
 	)
